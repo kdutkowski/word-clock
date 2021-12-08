@@ -44,10 +44,8 @@ void setup() {
   int i = 0;
   while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
     clear(CRGB::Black);
-    showTime(i % 24, i % 60, 0);
+    FastLED.showColor(CHSV(i++, 255, 255));
     FastLED.show();
-    Serial.print(++i);
-    Serial.print(' ');
     delay(10);
   }
 
@@ -59,6 +57,7 @@ void setup() {
   timeClient.begin();
 
 }
+
 
 void loop() {
   timeClient.update();
@@ -85,7 +84,7 @@ void printDateTime(Timezone tz, time_t utc, const char *descr)
   Serial.print(' ');
   Serial.println(descr);
   clear(CRGB::Black);
-  showTime(hour(t), minute(t), second(t));
+  showTime(hour(t), minute(t), CHSV(t/10, 255, 255));
   FastLED.show();
 }
 
@@ -256,7 +255,7 @@ void test() {
     for (int i = 0; i <= 12; i++) {
       for (int m = 0; m <= 60; m++) {
         clear(CRGB::Black);
-        showTime(i, m, 0);
+        showTime(i, m, CRGB::Red);
         FastLED.show();
         delay(200);
       }
@@ -264,87 +263,87 @@ void test() {
   }
 }
 
-void showTime(int h, int m, int s) {
+void showTime(int h, int m, CRGB color) {
 
   h = h % 12;
   int next = (h + 1) % 12;
   if (m > 58) {
-    beforeHour[next](CRGB::Red);
+    beforeHour[next](color);
     return;
   }
   if (m > 56) {
-    za(CRGB::White);
-    trzy(CRGB::Yellow);
-    beforeHour[next](CRGB::Red);
+    za(color);
+    trzy(color);
+    beforeHour[next](color);
     return;
   }
   if (m > 52) {
-    za(CRGB::White);
-    piec(CRGB::Orange);
-    beforeHour[next](CRGB::Red);
+    za(color);
+    piec(color);
+    beforeHour[next](color);
     return;
   }
   if (m > 47) {
-    za(CRGB::White);
-    dziesiec(CRGB::White);
-    beforeHour[next](CRGB::Red);
+    za(color);
+    dziesiec(color);
+    beforeHour[next](color);
     return;
   }
   if (m > 42) {
-    za(CRGB::White);
-    kwadrans(CRGB::White);
-    beforeHour[next](CRGB::Red);
+    za(color);
+    kwadrans(color);
+    beforeHour[next](color);
     return;
   }
   if (m > 32) {
-    za(CRGB::White);
-    dwadziescia(CRGB::White);
-    piec(CRGB::White);
-    beforeHour[next](CRGB::LightGreen);
+    za(color);
+    dwadziescia(color);
+    piec(color);
+    beforeHour[next](color);
     return;
   }
   if (m > 27) {
-    wpol(CRGB::White);
-    _do(CRGB::White);
-    afterHour[next](CRGB::Lime);
+    wpol(color);
+    _do(color);
+    afterHour[next](color);
     return;
   }
   if (m > 22) {
-    dwadziescia(CRGB::White);
-    piec(CRGB::White);
-    po(CRGB::White);
-    afterHour[h](CRGB::Magenta);
+    dwadziescia(color);
+    piec(color);
+    po(color);
+    afterHour[h](color);
     return;
   }
   if (m > 16) {
-    dwadziescia(CRGB::White);
-    po(CRGB::White);
-    afterHour[h](CRGB::OrangeRed);
+    dwadziescia(color);
+    po(color);
+    afterHour[h](color);
     return;
   }
   if (m > 12) {
-    kwadrans(CRGB::White);
-    po(CRGB::White);
-    afterHour[h](CRGB::OrangeRed);
+    kwadrans(color);
+    po(color);
+    afterHour[h](color);
     return;
   }
   if (m > 7) {
-    dziesiec(CRGB::White);
-    po(CRGB::White);
-    afterHour[h](CRGB::PaleVioletRed);
+    dziesiec(color);
+    po(color);
+    afterHour[h](color);
     return;
   }
   if (m > 3) {
-    piec(CRGB::White);
-    po(CRGB::White);
-    afterHour[h](CRGB::Plum);
+    piec(color);
+    po(color);
+    afterHour[h](color);
     return;
   }
   if (m > 1) {
-    trzy(CRGB::White);
-    po(CRGB::White);
-    afterHour[h](CRGB::Purple);
+    trzy(color);
+    po(color);
+    afterHour[h](color);
     return;
   }
-  beforeHour[h](CRGB::Red);
+  beforeHour[h](color);
 }
