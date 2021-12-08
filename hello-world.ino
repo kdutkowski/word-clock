@@ -295,6 +295,12 @@ void showTime(int h, int m, CRGB color) {
     beforeHour[next](color);
     return;
   }
+  if (m > 37) {
+    za(color);
+    dwadziescia(color);
+    beforeHour[next](color);
+    return;
+  }
   if (m > 32) {
     za(color);
     dwadziescia(color);
