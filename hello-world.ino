@@ -29,7 +29,6 @@ CRGB leds[NUM_LEDS];
 
 void setup() {
   Serial.begin(115200);         // Start the Serial communication to send messages to the computer
-
   FastLED.addLeds<WS2812B, DATA_PIN, RGB>(leds, NUM_LEDS);  // GRB ordering is typical
 
   //test();
@@ -42,8 +41,16 @@ void setup() {
 
   int i = 0;
   while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
-    clear(CRGB::Black);
-    FastLED.showColor(CHSV(i++, 255, 255));
+    clear(CHSV(i++, 255, 255));
+    FastLED.show();
+    delay(10);
+  }
+
+  timeClient.update();
+
+  for (; i >= 0; i--) {
+    clear(CHSV(i, 255, i));
+    printDateTime(CE, timeClient.getEpochTime(), "Warsaw");
     FastLED.show();
     delay(10);
   }
@@ -61,10 +68,11 @@ void setup() {
 void loop() {
   timeClient.update();
   Serial.println(timeClient.getFormattedTime());
+  clear(CRGB::Black);
   printDateTime(CE, timeClient.getEpochTime(), "Warsaw");
+  FastLED.show();
   delay(1000);
 }
-
 
 
 
@@ -82,9 +90,8 @@ void printDateTime(Timezone tz, time_t utc, const char *descr)
   Serial.print(buf);
   Serial.print(' ');
   Serial.println(descr);
-  clear(CRGB::Black);
-  showTime(hour(t), minute(t), CHSV(t/10, 255, 255));
-  FastLED.show();
+  showTime(hour(t), minute(t), CHSV(t / 10, 255, 255));
+
 }
 
 
