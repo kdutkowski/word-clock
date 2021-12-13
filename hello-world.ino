@@ -29,7 +29,6 @@ CRGB leds[NUM_LEDS];
 
 void setup() {
   Serial.begin(115200);         // Start the Serial communication to send messages to the computer
-  delay(1000);
 
   FastLED.addLeds<WS2812B, DATA_PIN, RGB>(leds, NUM_LEDS);  // GRB ordering is typical
 
