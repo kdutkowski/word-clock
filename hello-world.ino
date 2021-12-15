@@ -74,8 +74,6 @@ void loop() {
   delay(1000);
 }
 
-
-
 // given a Timezone object, UTC and a string description, convert and print local time with time zone
 void printDateTime(Timezone tz, time_t utc, const char *descr)
 {
@@ -90,7 +88,7 @@ void printDateTime(Timezone tz, time_t utc, const char *descr)
   Serial.print(buf);
   Serial.print(' ');
   Serial.println(descr);
-  showTime(hour(t), minute(t), CHSV(t / 10, 255, 255));
+  showTime(hour(t), minute(t), CHSV(t / 10, 255, getBrightness()));
 
 }
 
@@ -358,4 +356,14 @@ void showTime(int h, int m, CRGB color) {
     return;
   }
   beforeHour[h](color);
+}
+
+int getBrightness() {
+    int b = (1024-analogRead(A0))/4;
+    b += 10;
+    if (b > 256) {
+      b = 255;
+    }
+    Serial.println(b);
+    return b; 
 }
